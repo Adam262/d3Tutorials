@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1.0">
+        <meta name="description" content="content">
+        <meta name="keywords" content="foo, baz, bar">
+
+        <title>My Cool Site</title>
+
+        <link rel="stylesheet" src="http//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.5.1/rickshaw.min.css">
+        <link rel="stylesheet" type="text/css" href="styles/main.css">
+        <link rel="stylesheet" type="text/css" href="styles/d3.css">
+    </head>
+
+    <body>
+        <div class="container">
+            <!-- D3 selector basics -->
+            
+            <h2>D3 Stuff</h2>
+            <section id="d3-select">
+                <div class="item"></div>
+            </section> 
+
+            <!-- Draw inline SVG -->
+
+            <h2>SVG Primitives via Inline Code</h2>
+            <svg id = 'svg-primitives'>
+                <!-- draw a rect. note rect is self-closing -->  
+                <rect x = '100' y = '250' width = '300' height = '150' fill = 'blue'/> 
+
+                <!-- circle. set center x, center y, radius   -->
+                <circle r = '150' cx = '500' cy = '50' style = "fill: red"/>  
+
+                <!-- triangle. use path or polyline.  -->
+                   
+                <polyline points = "100 250 250 100 400 250"
+                            style = "fill:yellow"/>
+
+                <polyline points = "325 175 325 150 350 150 350 200"
+                            style = "fill:black"/>
+                <!-- <path d = 'M 100 250 L 250 100 L 400 250 z'-->
+                
+                <!-- set element group -->
+                <g id = "window">
+                    <rect x = '185' y = '300' width = '30' height = '30' style = "fill: yellow"/> 
+                    <rect x = '285' y = '300' width = '30' height = '30' style = "fill: yellow"/> 
+                </g>
+
+                 <!-- invoke element group    -->
+                <!-- <use xlink:href = '#window' x = '285' y = '300'/>  -->
+
+                <rect x = '235' y = '350' width = '30' height = '60' style = "fill: yellow"/> 
+                
+                <text x = '150' y = '245' font-family = "Arial" font-size = '1.5em'>
+                    Get off the roof
+                </text>
+            </svg>  
+
+            <!-- draw primitives programatically -->
+            <div id = "svg-d3-container"> 
+                <h2>SVG Primitives via D3</h2>  
+                     
+            </div>  
+
+            <div id="bar-chart-container">
+                <h2>D3 Bar Chart with Scaling</h2>
+            </div>              
+        </div>
+    </body>
+
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.5.1/rickshaw.min.js" type="text/javascript"></script>
+    <script src="scripts/intro.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/svg.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/barChart.js" type="text/javascript" charset="utf-8"></script>
+</html>
