@@ -1,22 +1,3 @@
-// var barData = [
-//   { value: 150, color: 'red', label: 'foo' },
-//   { value: 250, color: 'blue', label: 'baz' },
-//   { value: 350, color: 'yellow', label: 'bar' },
-//   { value: 200, color: 'green', label: 'qux' },
-//   { value: 150, color: 'red', label: 'food' },
-//   { value: 500, color: 'blue', label: 'bazbar' },
-//   { value: 300, color: 'yellow', label: 'barbaz' },
-//   { value: 200, color: 'green', label: 'quux' },
-//   { value: 500, color: 'blue', label: 'bazbar' },
-//   { value: 300, color: 'yellow', label: 'barbaz' },
-//   { value: 200, color: 'green', label: 'quux' },
-//   { value: 200, color: 'green', label: 'quux' },
-//   { value: 500, color: 'blue', label: 'bazbar' },
-//   { value: 300, color: 'yellow', label: 'barbaz' },
-//   { value: 200, color: 'green', label: 'quux' },
-//   { value: 150, color: 'black', label: 'norfwest' }
-// ]
-
 function makeData(n) {
   var arr = [];
 
@@ -27,7 +8,7 @@ function makeData(n) {
   return arr;
 };
 
-var barDataValues = makeData(100)
+var data = makeData(100)
 
 var height    = 400,
     width     = 600,
@@ -38,24 +19,18 @@ var tempColor;
 
 // add linear scale. without it, bars taller than svg height variable would overflow svg
 var yScale = d3.scale.linear()
-  .domain([0, d3.max(barDataValues)]) // input
+  .domain([0, d3.max(data)]) // input
   .range([0, height]) // output
    
 // add orginal scale. without it,  additional bars would eventually overflow svg horizontally
 // note rangeBands is range w/ some CSS, ie padding
 var xScale = d3.scale.ordinal()
-  .domain(d3.range(0, barDataValues.length))
+  .domain(d3.range(0, data.length))
   .rangeBands([0, width])
-
-// number of items in domain must match number of items in range
-// 2 item example
-// var colors = d3.scale.linear()
-//   .domain([0, barDataValues.length])
-//   .range(['#FFB832', '#C61C6F']);
 
 // 4 item example
 var colors = d3.scale.linear()
-  .domain([0, barDataValues.length * 0.33, barDataValues.length * 0.66, barDataValues.length]) // map value to decimal
+  .domain([0, data.length * 0.33, data.length * 0.66, data.length]) // map value to decimal
   .range(['#B58929', '#C61C6F', '#268BD2', '#85992C']);
 
 var toolTip = d3.select('#bar-chart-container')
@@ -68,11 +43,11 @@ var toolTip = d3.select('#bar-chart-container')
                   'opacity': 0
                 })
 
-var barChart = d3.select('#bar-chart-container')
+var barChart = d3.select('#data-transformations-container')
   .append('svg')
-    .property('id', 'bar-chart')
+    .property('id', 'data-transformation')
     .selectAll('rect')
-      .data(barDataValues) // once you invoke .data(), can then call data argument whatever you want - ie, d
+      .data(data) // once you invoke .data(), can then call data argument whatever you want - ie, d
       .enter()
       .append('rect')
         .style('fill', function(d, i){ // add color gradient scaled to length of xScale
@@ -81,15 +56,9 @@ var barChart = d3.select('#bar-chart-container')
         .attr({
           'width': xScale.rangeBand(),
           'height': 0, // move height attribute to variable transition
-          // 'height': function(barDataValues){
-          //   return yScale(barDataValues); // scales data to height of svg
-          // },
           'x': function(d, i){
             return xScale(i);
           },
-          // 'y': function(barDataValues){
-          //   return height - yScale(barDataValues);
-          // }
           'y': height
         })
       // add JS events
@@ -122,11 +91,6 @@ var barChart = d3.select('#bar-chart-container')
             'fill': tempColor
           })
       })
-        // .append('text')
-        //   .text(function(barData){
-        //     return barData.label;
-        //   })
-
 // add transitions to whole chart
 barChart.transition()
     .attr({
