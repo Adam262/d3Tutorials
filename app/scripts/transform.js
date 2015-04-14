@@ -1,3 +1,4 @@
+// create data
 function makeData(n) {
   var arr = [];
 
@@ -10,11 +11,13 @@ function makeData(n) {
 
 var data = makeData(100);
 
+// sort
 data = data.sort(function(a,b) {
  return a - b;
 })
 
-var margin = { // create margin object. see http://bl.ocks.org/mbostock/3019563
+// create margin object. see http://bl.ocks.org/mbostock/3019563
+var margin = { 
   top: 30,
   right: 30,
   bottom: 40,
