@@ -2,16 +2,27 @@ function makeData(n) {
   var arr = [];
 
   while (n > 0) {
-    arr.push(1 + Math.round(Math.random() * n))
+    arr.push(5 + Math.round(Math.random() * 100))
     n--;
   }
   return arr;
 };
 
-var data = makeData(100)
+var data = makeData(100);
 
-var height    = 400,
-    width     = 600,
+data = data.sort(function(a,b) {
+ return a - b;
+})
+
+var margin = { // create margin object. see http://bl.ocks.org/mbostock/3019563
+  top: 30,
+  right: 30,
+  bottom: 40,
+  left: 50
+}
+
+var height    = 400 - margin.top - margin.bottom, // remove margins. add back below
+    width     = 600 - margin.left - margin.right,
     barWidth  = 30,
     barOffset = 5;
 
@@ -26,7 +37,7 @@ var yScale = d3.scale.linear()
 // note rangeBands is range w/ some CSS, ie padding
 var xScale = d3.scale.ordinal()
   .domain(d3.range(0, data.length))
-  .rangeBands([0, width])
+  .rangeBands([0, width], 0.3) // add padding to rangeBands
 
 // 4 item example
 var colors = d3.scale.linear()
@@ -45,7 +56,14 @@ var toolTip = d3.select('#bar-chart-container')
 
 var barChart = d3.select('#data-transformations-container')
   .append('svg')
+    .attr({
+      'width': width + margin.left + margin.right,
+      'height': height + margin.top + margin.bottom 
+    })
     .property('id', 'data-transformation')
+    .append('g') // add svg element group
+    .property('id', 'bar-elements')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.right + ')')
     .selectAll('rect')
       .data(data) // once you invoke .data(), can then call data argument whatever you want - ie, d
       .enter()
@@ -107,4 +125,64 @@ barChart.transition()
     .duration(1000)
     .ease('elastic') // add easing. see https://github.com/mbostock/d3/wiki/Transitions#ease
 
-         
+// create y axis scale. Existing yScale reads in wrong order
+var vGuideScale = d3.scale.linear()
+  .domain([0, d3.max(data)])
+  .range([height, 0]) // reverse range from yScale
+
+var hGuideScale = d3.scale.linear()
+  .domain([])
+  .range([])
+
+// create y axis
+var vAxis = d3.svg.axis()
+  .scale(vGuideScale)
+  .orient('left') // right, top, bottom
+  .ticks(10)
+
+// create svg element group for axis ticks
+var vGuide = d3.select('svg#data-transformation')
+  .append('g')
+  .property('id', 'vGuide')
+
+vAxis(vGuide)
+
+vGuide.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+
+vGuide.selectAll('path')
+    .style({
+      'fill': 'none',  // remove thick bar from y axis - now just ticks
+      'stroke': '#000' // replace with thin bar
+    })
+
+vGuide.selectAll('line')
+    .style({
+      'stroke': '#000' // set tick marks
+    })
+
+// create x axis
+var hAxis = d3.svg.axis()
+  .scale(xScale)
+  .orient('bottom')
+  .tickValues(xScale.domain().filter(function(d,i) {
+    return !(i % (data.length/5));  // filters out ticks. in this case, only 5 ticks, regardless of data size
+  }))    
+ 
+
+var hGuide = d3.select('svg#data-transformation')
+  .append('g')
+  .property('id', 'hGuide')
+
+hAxis(hGuide)
+
+hGuide.attr('transform', 'translate(' + margin.left + ',' + (height + margin.top) + ')')
+
+hGuide.selectAll('path').attr({
+  'fill': 'none',
+  'stroke': '#000'
+})
+
+hGuide.selectAll('line').attr({
+  'stroke': '#000'
+})
+
