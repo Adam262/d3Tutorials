@@ -7,3 +7,20 @@ svg {
   height: 400px;
   width: 600px;
 }
+
+.line {
+  fill: none;
+  stroke: blue;
+  stroke-width: 1rem;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path{
+  display: none;
+}
